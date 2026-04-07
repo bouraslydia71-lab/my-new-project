@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Pilot | Search Flights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #0057ff;
+            --brand-secondary: #001d4a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('flight5jpg.jpg');
+            background-size: cover; background-position: center; min-height: 100vh; 
+            display: flex; flex-direction: column; color: white;
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; }
+        .logo { font-size: 22px; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+
+        .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-bottom: 80px; }
+        h1 { font-size: 3rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+        .sub-text { font-size: 16px; opacity: 0.9; margin-bottom: 40px; }
+
+        .trip-type { display: flex; gap: 24px; margin-bottom: 12px; width: 90%; max-width: 1100px; justify-content: flex-start; }
+        .trip-type label { font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+        .trip-type input { accent-color: var(--brand-primary); width: 16px; height: 16px; }
+
+        /* Compact Pro Search Bar */
+        .search-container {
+            background: var(--white); padding: 12px; border-radius: 16px; 
+            display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 10px;
+            width: 90%; max-width: 1100px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            align-items: end;
+        }
+
+        .input-group { position: relative; text-align: left; }
+        .input-group label { 
+            display: block; color: var(--text-muted); font-size: 10px; 
+            font-weight: 700; margin-bottom: 6px; text-transform: uppercase; padding-left: 4px;
+        }
+        
+        .input-group input, .input-group select, .travelers-box { 
+            width: 100%; border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px;
+            font-size: 13px; color: var(--text-main); outline: none; background: #fcfdfe; font-weight: 600; 
+            height: 42px; display: flex; align-items: center;
+        }
+
+        /* Traveler Dropdown */
+        .travelers-box { cursor: pointer; justify-content: space-between; }
+        .travelers-box::after { content: '▾'; font-size: 10px; color: var(--text-muted); }
+
+        .pax-dropdown {
+            position: absolute; top: calc(100% + 10px); right: 0; background: white; width: 280px; padding: 20px;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: none; z-index: 100; color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .pax-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .pax-label span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; }
+        .pax-label strong { font-size: 14px; font-weight: 600; }
+
+        .pax-ctrl { display: flex; align-items: center; gap: 12px; }
+        .pax-ctrl button { 
+            width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); 
+            background: white; cursor: pointer; font-size: 18px; line-height: 1; transition: 0.2s;
+        }
+        .pax-ctrl button:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+        .pax-ctrl span { width: 20px; text-align: center; font-weight: 700; }
+
+        .btn-search {
+            background: var(--brand-primary); color: white; border: none; padding: 0 25px; border-radius: 10px;
+            font-weight: 700; cursor: pointer; height: 42px; font-size: 14px;
+        }
+
+        @media (max-width: 950px) {
+            .search-container { grid-template-columns: 1fr 1fr; }
+            .btn-search { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav><a href="#" class="logo">Trip Pilot.</a></nav>
+
+    <div class="hero">
+        <h1>Sky-High <span style="color:#71a4ff">Luxury</span></h1>
+        <p class="sub-text">Seamless flight search for the modern traveler</p>
+
+        <div class="trip-type">
+            <label><input type="radio" name="t-type" value="round" checked onclick="toggleReturn(true)"> Round Trip</label>
+            <label><input type="radio" name="t-type" value="oneway" onclick="toggleReturn(false)"> One Way</label>
+        </div>
+
+        <div class="search-container">
+            <div class="input-group"><label>Origin</label><input type="text" id="fromCity" placeholder="From?"></div>
+            <div class="input-group"><label>Destination</label><input type="text" id="toCity" placeholder="To?"></div>
+            <div class="input-group"><label>Departure</label><input type="date" id="depDate"></div>
+            <div class="input-group" id="returnGroup"><label>Return</label><input type="date" id="arrDate"></div>
+
+            <div class="input-group">
+                <label>Travelers & Class</label>
+                <div class="travelers-box" id="paxDisplay" onclick="togglePax(event)">1 Traveler, Economy</div>
+                
+                <div class="pax-dropdown" id="paxDropdown">
+                    <div class="pax-row">
+                        <div class="pax-label"><strong>Adults</strong><span>Age 12+</span></div>
+                        <div class="pax-ctrl">
+                            <button onclick="updatePax('a', -1)">-</button><span id="a-cnt">1</span><button onclick="updatePax('a', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="pax-row">
+                        <div class="pax-label"><strong>Minors</strong><span>Age 2-11</span></div>
+                        <div class="pax-ctrl">
+                            <button onclick="updatePax('m', -1)">-</button><span id="m-cnt">0</span><button onclick="updatePax('m', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="pax-row">
+                        <div class="pax-label"><strong>Babies</strong><span>Under 2</span></div>
+                        <div class="pax-ctrl">
+                            <button onclick="updatePax('b', -1)">-</button><span id="b-cnt">0</span><button onclick="updatePax('b', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="pax-row" style="margin-top:15px; padding-top:15px; border-top:1px solid var(--border);">
+                        <div class="pax-label"><strong>Cabin Class</strong></div>
+                        <select id="cabinClass" onchange="updatePax(null, 0)" style="width:120px; height:35px; padding:5px;">
+                            <option value="Economy">Economy</option>
+                            <option value="Business">Business</option>
+                            <option value="First">First</option>
+                        </select>
+                    </div>
+                    <button onclick="togglePax(event)" style="width:100%; margin-top:15px; padding:10px; background:var(--brand-primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Confirm</button>
+                </div>
+            </div>
+
+            <button class="btn-search" onclick="doSearch()">Search</button>
+        </div>
+    </div>
+
+    <script>
+        let counts = { a: 1, m: 0, b: 0 };
+
+        function toggleReturn(show) {
+            const group = document.getElementById('returnGroup');
+            group.style.opacity = show ? "1" : "0.3";
+            group.style.pointerEvents = show ? "auto" : "none";
+        }
+
+        function togglePax(e) {
+            e.stopPropagation();
+            const d = document.getElementById('paxDropdown');
+            const isOpen = d.style.display === 'block';
+            d.style.display = isOpen ? 'none' : 'block';
+        }
+
+        function updatePax(type, val) {
+            if (type) {
+                counts[type] = Math.max(0, counts[type] + val);
+                if (type === 'a' && counts.a < 1) counts.a = 1; // Must have 1 adult
+                document.getElementById(`${type}-cnt`).innerText = counts[type];
+            }
+            
+            const total = counts.a + counts.m + counts.b;
+            const cabin = document.getElementById('cabinClass').value;
+            document.getElementById('paxDisplay').innerText = `${total} Traveler${total > 1 ? 's' : ''}, ${cabin}`;
+        }
+
+        function doSearch() {
+            const f = document.getElementById('fromCity').value;
+            const t = document.getElementById('toCity').value;
+            const d = document.getElementById('depDate').value;
+            const cabin = document.getElementById('cabinClass').value;
+
+            if(!f || !t || !d) return alert("Fill in required fields.");
+
+            // Passing all counts to results page
+            const url = `flightsearchresult.html?from=${f}&to=${t}&date=${d}&a=${counts.a}&m=${counts.m}&b=${counts.b}&class=${cabin}`;
+            window.location.href = url;
+        }
+
+        document.addEventListener('click', (e) => {
+            const d = document.getElementById('paxDropdown');
+            if (!d.contains(e.target)) d.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
