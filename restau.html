@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants - Trip Pilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #0f172a;
+            background: #f6f8fb;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0 30px;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .menu a:hover {
+            color: white;
+        }
+
+        .menu a:hover::after {
+            width: 100%;
+        }
+
+        .menu a.active {
+            color: white;
+            font-weight: 600;
+        }
+
+        .menu a.active::after {
+            width: 100%;
+        }
+
+        .login-btn {
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .login-btn:hover {
+            background: white;
+            color: #0f172a;
+        }
+
+        /* HERO SECTION */
+        .hero-wrapper {
+            position: relative;
+            min-height: 500px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 30px;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            padding: 120px 80px 80px;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero-text span {
+            color: #60a5fa;
+        }
+
+        .hero-text p {
+            color: rgba(255,255,255,0.95);
+            font-size: 16px;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+            max-width: 600px;
+        }
+
+        /* SEARCH BAR */
+        .search-widget {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 900px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-field {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            padding: 8px 10px;
+            flex: 1;
+            min-width: 0;
+            color: #334155;
+        }
+
+        .search-field::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-btn {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* CONTENT SECTIONS */
+        .content-section {
+            position: relative;
+            z-index: 10;
+            padding: 60px 5%;
+            background: #f6f8fb;
+        }
+
+        .section-header {
+            text-align: left;
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: #0f172a;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* FILTERS */
+        .filters {
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-tag {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .filter-tag:hover,
+        .filter-tag.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* RESTAURANTS GRID */
+        .restaurants-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .restaurant-card.hidden {
+            display: none;
+        }
+
+        .restaurant-image {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .restaurant-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .restaurant-card:hover .restaurant-image img {
+            transform: scale(1.08);
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: #94a3b8;
+        }
+
+        .favorite-btn:hover {
+            background: #ff4757;
+            color: white;
+        }
+
+        .badge-michelin {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #0f172a;
+        }
+
+        .badge-open {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(34, 197, 94, 0.95);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            color: white;
+        }
+
+        .restaurant-info {
+            padding: 20px;
+        }
+
+        .restaurant-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .restaurant-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .restaurant-cuisine {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .restaurant-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .restaurant-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-stars {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+        .rating-value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .rating-count {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .reserve-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reserve-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* CUISINES SECTION */
+        .cuisines-section {
+            background: white;
+            padding: 60px 5%;
+            margin: 40px 0;
+        }
+
+        .cuisines-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 30px auto 0;
+        }
+
+        .cuisine-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 200px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .cuisine-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .cuisine-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .cuisine-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
+        }
+
+        .cuisine-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .cuisine-count {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 10;
+            background: white;
+            padding: 40px 5%;
+            color: #0f172a;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* ANIMATIONS */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NO RESULTS */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        /* POPUP MODAL - Same as Activities */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .popup-modal.active {
+            display: flex;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: popupSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes popupSlide {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        
+        .popup-close:hover {
+            background: #ff4757;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .popup-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .popup-body {
+            padding: 30px;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .popup-title-section h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        
+        .popup-location {
+            color: #64748b;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .popup-price-section {
+            text-align: right;
+        }
+        
+        .popup-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        
+        .popup-price span {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        
+        .popup-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .popup-rating-stars {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+        
+        .popup-rating-value {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 18px;
+        }
+        
+        .popup-reviews {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .popup-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #dbeafe;
+            color: #3b82f6;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .popup-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        
+        .popup-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .popup-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .popup-feature-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .popup-feature-text h4 {
+            font-size: 14px;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        
+        .popup-feature-text p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        
+        .popup-includes {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .popup-includes h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        
+        .popup-includes ul {
+            list-style: none;
+            color: #64748b;
+            line-height: 2;
+        }
+        
+        .popup-includes li:before {
+            content: "✓ ";
+            color: #22c55e;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .popup-booking-section {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+        }
+        
+        .popup-booking-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+        
+        .popup-form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .popup-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .popup-form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .popup-form-group input,
+        .popup-form-group select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            background: white;
+        }
+        
+        .popup-form-group input:focus,
+        .popup-form-group select:focus {
+            border-color: #3b82f6;
+        }
+        
+        .guest-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .guest-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: #f1f5f9;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #64748b;
+        }
+        
+        .guest-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .guest-count {
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: center;
+            color: #0f172a;
+        }
+        
+        .popup-total-section {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .popup-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .popup-total-row.final {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .popup-reserve-btn {
+            width: 100%;
+            padding: 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .popup-reserve-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* QR CODE MODAL */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .qr-modal.active {
+            display: flex;
+        }
+        
+        .qr-content {
+            background: white;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            animation: qrSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        @keyframes qrSlide {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .qr-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .qr-close:hover {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .qr-icon {
+            width: 80px;
+            height: 80px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+        
+        .qr-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+        
+        .qr-subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        
+        .qr-code-container {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(225deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(45deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(315deg, #0f172a 25%, transparent 25%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+            position: relative;
+            border-radius: 10px;
+        }
+        
+        .qr-code::after {
+            content: "🍽️";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            background: white;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+        
+        .qr-details {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .qr-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .qr-detail-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .qr-download-btn {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .qr-download-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+        
+        .qr-done-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .qr-done-btn:hover {
+            border-color: #0f172a;
+            color: #0f172a;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .restaurants-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .cuisines-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-text h1 {
+                font-size: 42px;
+            }
+            .popup-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+            }
+            .restaurants-grid {
+                grid-template-columns: 1fr;
+            }
+            .cuisines-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-text h1 {
+                font-size: 32px;
+            }
+            .hero-content {
+                padding: 100px 30px 60px;
+            }
+            .search-widget {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 15px;
+            }
+            .search-field {
+                width: 100%;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 12px;
+            }
+            .search-field:last-of-type {
+                border-bottom: none;
+            }
+            .search-btn {
+                width: 100%;
+                border-radius: 12px;
+                margin-top: 10px;
+                height: 40px;
+            }
+            nav {
+                width: 95%;
+                padding: 0 20px;
+            }
+            .hero-wrapper {
+                border-radius: 0;
+                min-height: 400px;
+            }
+            .popup-header {
+                flex-direction: column;
+            }
+            .popup-price-section {
+                text-align: left;
+            }
+            .popup-features {
+                grid-template-columns: 1fr;
+            }
+            .popup-image {
+                height: 250px;
+            }
+            .qr-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO SECTION WITH NAVIGATION -->
+    <div class="hero-wrapper">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="navbar">
+                <a href="index.html" class="logo">Trip Pilot</a>
+                <div class="menu">
+                    <a href="flights.html">Flights</a>
+                    <a href="hotelsdef.html">Hotels</a>
+                    <a href="activities.html">Activities</a>
+                    <a href="restau.html" class="active">Restaurants</a>
+                    <a href="role.html" class="login-btn">Sign up</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Extraordinary <span>Dining.</span></h1>
+                <p>Discover Michelin-starred venues, hidden local gems, and exclusive culinary experiences worldwide.</p>
+                
+                <!-- Search Bar -->
+                <div class="search-widget">
+                    <input type="text" class="search-field" placeholder="Location">
+                    <input type="date" class="search-field">
+                    <select class="search-field">
+                        <option>19:00</option>
+                        <option>20:00</option>
+                        <option>21:00</option>
+                    </select>
+                    <select class="search-field">
+                        <option>2 People</option>
+                        <option>3 People</option>
+                        <option>4 People</option>
+                    </select>
+                    <button class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="content-section" style="padding-bottom: 0;">
+        <div class="filters">
+            <div class="filter-tags">
+                <span class="filter-tag active" data-filter="all">All Restaurants</span>
+                <span class="filter-tag" data-filter="michelin">Michelin Star</span>
+                <span class="filter-tag" data-filter="trending">Trending Now</span>
+                <span class="filter-tag" data-filter="wine">Wine Pairing</span>
+                <span class="filter-tag" data-filter="vegan">Vegan Options</span>
+                <span class="filter-tag" data-filter="available">Available Tonight</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESTAURANTS LIST -->
+    <section class="content-section" id="restaurants">
+        <div class="section-header">
+            <h2>Curated Dining Experiences</h2>
+            <p id="resultsCount">Showing 1-9 of 128 restaurants in Amalfi Coast</p>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <h3>No restaurants found</h3>
+            <p>Try adjusting your filters to see more results</p>
+        </div>
+
+        <div class="restaurants-grid" id="restaurantsGrid">
+            <!-- Restaurants injected by JS -->
+        </div>
+    </section>
+
+    <!-- CUISINES SECTION -->
+    <section class="cuisines-section">
+        <div class="section-header" style="text-align: center;">
+            <h2>Browse by Cuisine</h2>
+            <p style="color: #64748b; margin-top: 10px;">Explore restaurants by your favorite cuisine</p>
+        </div>
+        
+        <div class="cuisines-grid">
+            <div class="cuisine-card">
+                <img src="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=600" alt="Italian">
+                <div class="cuisine-overlay">
+                    <div class="cuisine-name">Italian</div>
+                    <div class="cuisine-count">42 restaurants</div>
+                </div>
+            </div>
+            <div class="cuisine-card">
+                <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600" alt="Japanese">
+                <div class="cuisine-overlay">
+                    <div class="cuisine-name">Japanese</div>
+                    <div class="cuisine-count">18 restaurants</div>
+                </div>
+            </div>
+            <div class="cuisine-card">
+                <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600" alt="French">
+                <div class="cuisine-overlay">
+                    <div class="cuisine-name">French</div>
+                    <div class="cuisine-count">24 restaurants</div>
+                </div>
+            </div>
+            <div class="cuisine-card">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600" alt="Seafood">
+                <div class="cuisine-overlay">
+                    <div class="cuisine-name">Seafood</div>
+                    <div class="cuisine-count">31 restaurants</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Trip Pilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- RESTAURANT POPUP -->
+    <div id="restaurantPopup" class="popup-modal">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeRestaurantPopup()">&times;</button>
+            <img id="popupImage" class="popup-image" src="" alt="">
+            <div class="popup-body">
+                <div class="popup-header">
+                    <div class="popup-title-section">
+                        <span id="popupTag" class="popup-tag">Italian</span>
+                        <h2 id="popupName">Restaurant Name</h2>
+                        <div class="popup-location" id="popupLocation">📍 Location</div>
+                        <div class="popup-rating">
+                            <span class="popup-rating-stars" id="popupStars">★★★★★</span>
+                            <span class="popup-rating-value" id="popupRating">4.9</span>
+                            <span class="popup-reviews" id="popupReviews">2,847 reviews</span>
+                        </div>
+                    </div>
+                    <div class="popup-price-section">
+                        <div class="popup-price" id="popupPrice">$$$</div>
+                        <div style="color: #94a3b8; font-size: 14px;">price range</div>
+                    </div>
+                </div>
+                
+                <p class="popup-description" id="popupDescription">
+                    Experience exceptional dining with carefully crafted dishes using the freshest local ingredients.
+                </p>
+                
+                <div class="popup-features">
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">🍽️</div>
+                        <div class="popup-feature-text">
+                            <h4>Cuisine</h4>
+                            <p id="popupCuisine">Italian Seafood</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">⏰</div>
+                        <div class="popup-feature-text">
+                            <h4>Hours</h4>
+                            <p id="popupHours">12:00 PM - 11:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">👨‍🍳</div>
+                        <div class="popup-feature-text">
+                            <h4>Chef</h4>
+                            <p id="popupChef">Award-winning</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">🌿</div>
+                        <div class="popup-feature-text">
+                            <h4>Dietary</h4>
+                            <p id="popupDietary">Vegetarian, Gluten-free</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="popup-includes">
+                    <h3>Highlights</h3>
+                    <ul id="popupHighlights">
+                        <li>Michelin-starred cuisine</li>
+                        <li>Waterfront dining</li>
+                        <li>Fresh local ingredients</li>
+                        <li>Extensive wine selection</li>
+                        <li>Romantic atmosphere</li>
+                    </ul>
+                </div>
+                
+                <div class="popup-booking-section">
+                    <h3 class="popup-booking-title">Reserve Your Table</h3>
+                    <div class="popup-form-row">
+                        <div class="popup-form-group">
+                            <label>Date</label>
+                            <input type="date" id="popupDate" required>
+                        </div>
+                        <div class="popup-form-group">
+                            <label>Time</label>
+                            <select id="popupTime" required>
+                                <option>17:00</option>
+                                <option>18:00</option>
+                                <option>19:00</option>
+                                <option>20:00</option>
+                                <option>21:00</option>
+                            </select>
+                        </div>
+                        <div class="popup-form-group">
+                            <label>Guests</label>
+                            <div class="guest-selector">
+                                <button class="guest-btn" onclick="changePopupGuests(-1)">-</button>
+                                <span class="guest-count" id="popupGuestCount">2</span>
+                                <button class="guest-btn" onclick="changePopupGuests(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="popup-form-row">
+                        <div class="popup-form-group" style="grid-column: span 2;">
+                            <label>Your Name</label>
+                            <input type="text" id="popupGuestName" placeholder="Full name" required>
+                        </div>
+                        <div class="popup-form-group">
+                            <label>Email</label>
+                            <input type="email" id="popupGuestEmail" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="popup-form-group" style="margin-bottom: 20px;">
+                        <label>Special Requests (Optional)</label>
+                        <input type="text" id="popupRequests" placeholder="Allergies, special occasions, seating preferences...">
+                    </div>
+                    
+                    <div class="popup-total-section">
+                        <div class="popup-total-row">
+                            <span>Table Reservation</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="popup-total-row final">
+                            <span>Total Deposit</span>
+                            <span id="popupTotal">$0</span>
+                        </div>
+                    </div>
+                    
+                    <button class="popup-reserve-btn" onclick="submitRestaurantBooking()">Confirm Reservation</button>
+                    <p style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 15px;">
+                        No charges until you dine • Free cancellation up to 24 hours before
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR CODE MODAL FOR RESTAURANTS -->
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-content">
+            <button class="qr-close" onclick="closeQrModal()">&times;</button>
+            <div class="qr-icon">✓</div>
+            <h2 class="qr-title">Reservation Confirmed!</h2>
+            <p class="qr-subtitle">Show this QR code at the restaurant entrance</p>
+            
+            <div class="qr-code-container">
+                <div class="qr-code" id="qrCode"></div>
+            </div>
+            
+            <div class="qr-details">
+                <div class="qr-detail-row">
+                    <span>Restaurant</span>
+                    <span id="qrRestaurantName">Restaurant Name</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Date</span>
+                    <span id="qrDate">Jan 1, 2026</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Time</span>
+                    <span id="qrTime">19:00</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Guests</span>
+                    <span id="qrGuests">2 people</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Booking Ref</span>
+                    <span id="qrRef">#TRP-123456</span>
+                </div>
+            </div>
+            
+            <button class="qr-download-btn" onclick="downloadQR()">📥 Download QR Code</button>
+            <button class="qr-done-btn" onclick="closeQrModal()">Done</button>
+        </div>
+    </div>
+
+    <script>
+        // Restaurant Data
+        const restaurants = [
+            { 
+                id: 1, 
+                name: "L'Osteria del Mare", 
+                location: "Amalfi • Waterfront", 
+                cuisine: "Italian Seafood",
+                price: "$$$", 
+                priceValue: 3,
+                rating: 4.9, 
+                reviews: "2,847",
+                michelin: true,
+                trending: true,
+                wine: true,
+                vegan: false,
+                available: true,
+                image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+                tags: ["Vegetarian", "Gluten-Free"],
+                description: "A waterfront gem serving the freshest seafood caught daily from the Mediterranean. Our chef transforms local ingredients into extraordinary dishes that capture the essence of the Amalfi Coast.",
+                features: ["Italian Seafood", "12:00 PM - 11:00 PM", "Chef Marco Rossi", "Vegetarian, Gluten-free"],
+                highlights: ["Michelin Guide recommended", "Waterfront terrace", "Daily fresh catch", "Extensive wine cellar", "Sunset views"]
+            },
+            { 
+                id: 2, 
+                name: "Kobe Zen Grill", 
+                location: "Positano • Hillside", 
+                cuisine: "Japanese Teppanyaki",
+                price: "$$$$", 
+                priceValue: 4,
+                rating: 4.8, 
+                reviews: "1,523",
+                michelin: false,
+                trending: true,
+                wine: false,
+                vegan: false,
+                available: true,
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800",
+                tags: ["Gluten-Free", "Keto"],
+                description: "Experience the art of Teppanyaki with premium Wagyu beef and the freshest sushi. Our master chefs perform culinary theatrics right at your table against stunning Positano views.",
+                features: ["Japanese Teppanyaki", "6:00 PM - 11:00 PM", "Master Chef Tanaka", "Gluten-free, Keto"],
+                highlights: ["Wagyu beef specialists", "Tableside cooking show", "Sake pairings", "Private dining rooms", "Panoramic views"]
+            },
+            { 
+                id: 3, 
+                name: "La Terrazza Sul Mare", 
+                location: "Ravello • Cliffside", 
+                cuisine: "Fine Dining",
+                price: "$$$$", 
+                priceValue: 4,
+                rating: 5.0, 
+                reviews: "892",
+                michelin: true,
+                trending: true,
+                wine: true,
+                vegan: true,
+                available: false,
+                image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+                tags: ["Vegetarian", "Vegan"],
+                description: "Two Michelin stars shine over this cliffside sanctuary. Each dish tells a story of the region, reimagined through avant-garde techniques and served with panoramic Mediterranean views.",
+                features: ["Fine Dining", "7:00 PM - 10:30 PM", "Executive Chef Bianchi", "Vegetarian, Vegan, Gluten-free"],
+                highlights: ["Two Michelin stars", "Tasting menus", "Wine pairings", "Cliffside terrace", "Chef's table experience"]
+            },
+            { 
+                id: 4, 
+                name: "Trattoria Nonna Rosa", 
+                location: "Praiano • Village Center", 
+                cuisine: "Traditional Italian",
+                price: "$$", 
+                priceValue: 2,
+                rating: 4.7, 
+                reviews: "3,241",
+                michelin: false,
+                trending: false,
+                wine: false,
+                vegan: false,
+                available: true,
+                image: "https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?w=800",
+                tags: ["Vegetarian", "Halal"],
+                description: "Family-owned for three generations, Nonna Rosa serves authentic recipes passed down through time. Homemade pasta, wood-fired pizza, and the warmest hospitality in Praiano.",
+                features: ["Traditional Italian", "11:00 AM - 10:00 PM", "Family Recipes", "Vegetarian, Halal"],
+                highlights: ["Family owned since 1960", "Wood-fired oven", "Homemade pasta", "Local wine selection", "Garden seating"]
+            },
+            { 
+                id: 5, 
+                name: "Il Grottino", 
+                location: "Atrani • Seaside Cave", 
+                cuisine: "Mediterranean",
+                price: "$$$", 
+                priceValue: 3,
+                rating: 4.9, 
+                reviews: "1,156",
+                michelin: false,
+                trending: true,
+                wine: true,
+                vegan: true,
+                available: true,
+                image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800",
+                tags: ["Vegan", "Vegetarian"],
+                description: "Dine in a magical sea cave where waves echo against ancient stone. Mediterranean flavors meet sustainable practices in this unforgettable natural setting.",
+                features: ["Mediterranean", "12:30 PM - 11:00 PM", "Chef Adriana", "Vegan, Vegetarian, Organic"],
+                highlights: ["Unique cave dining", "Sustainable seafood", "Organic wines", "Wave acoustics", "Romantic setting"]
+            },
+            { 
+                id: 6, 
+                name: "Bar Franco", 
+                location: "Maiori • Beachfront", 
+                cuisine: "Cocktail Bar",
+                price: "$$", 
+                priceValue: 2,
+                rating: 4.6, 
+                reviews: "2,089",
+                michelin: false,
+                trending: false,
+                wine: false,
+                vegan: true,
+                available: true,
+                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+                tags: ["Vegan", "Vegetarian"],
+                description: "Sunset cocktails and innovative small plates on Maiori's longest beach. Our mixologists craft signature drinks while you watch the sun dip into the Tyrrhenian Sea.",
+                features: ["Cocktail Bar", "4:00 PM - 2:00 AM", "Head Mixologist Luca", "Vegan, Vegetarian"],
+                highlights: ["Signature cocktails", "Beachfront location", "Live DJ sets", "Tapas menu", "Sunset views"]
+            },
+            { 
+                id: 7, 
+                name: "Pizzeria da Michele", 
+                location: "Minori • Historic Center", 
+                cuisine: "Neapolitan Pizza",
+                price: "$", 
+                priceValue: 1,
+                rating: 4.8, 
+                reviews: "5,432",
+                michelin: false,
+                trending: true,
+                wine: false,
+                vegan: true,
+                available: true,
+                image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800",
+                tags: ["Vegetarian", "Vegan"],
+                description: "The true taste of Naples in the heart of Minori. Wood-fired ovens, San Marzano tomatoes, and fior di latte mozzarella create pizza perfection since 1958.",
+                features: ["Neapolitan Pizza", "11:30 AM - 11:00 PM", "Pizzaiolo Michele Jr.", "Vegetarian, Vegan"],
+                highlights: ["Since 1958", "Wood-fired oven", "San Marzano tomatoes", "Dough made fresh daily", "Local favorite"]
+            },
+            { 
+                id: 8, 
+                name: "Ristorante Marina", 
+                location: "Cetara • Fishing Village", 
+                cuisine: "Fresh Seafood",
+                price: "$$$", 
+                priceValue: 3,
+                rating: 4.7, 
+                reviews: "987",
+                michelin: false,
+                trending: false,
+                wine: true,
+                vegan: false,
+                available: true,
+                image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800",
+                tags: ["Gluten-Free", "Vegetarian"],
+                description: "In Cetara's ancient fishing port, we serve the day's catch minutes after it hits the dock. Colatura di alici and tuna specialties honor centuries of maritime tradition.",
+                features: ["Fresh Seafood", "12:00 PM - 10:30 PM", "Chef Giovanni", "Gluten-free, Vegetarian"],
+                highlights: ["Fishing village location", "Daily fresh catch", "Colatura di alici specialty", "Ancient recipes", "Harbor views"]
+            },
+            { 
+                id: 9, 
+                name: "Villa Cimbrone Dining", 
+                location: "Ravello • Infinity Terrace", 
+                cuisine: "Gourmet Italian",
+                price: "$$$$", 
+                priceValue: 4,
+                rating: 5.0, 
+                reviews: "642",
+                michelin: true,
+                trending: true,
+                wine: true,
+                vegan: true,
+                available: false,
+                image: "https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?w=800",
+                tags: ["Vegetarian", "Vegan", "Gluten-Free"],
+                description: "Dine on the world's most famous terrace where the horizon dissolves into infinity. Every course is a masterpiece, every view a painting, every moment unforgettable.",
+                features: ["Gourmet Italian", "7:00 PM - 11:00 PM", "Michelin Star Team", "All dietary options"],
+                highlights: ["World-famous terrace", "Michelin starred", "Infinity views", "Tasting menus", "Special occasions"]
+            }
+        ];
+
+        let currentRestaurant = null;
+        let popupGuestCount = 2;
+        let bookingData = {};
+
+        // Render Restaurants
+        function renderRestaurants(data) {
+            const grid = document.getElementById('restaurantsGrid');
+            grid.innerHTML = data.map(r => `
+                <div class="restaurant-card" 
+                     data-michelin="${r.michelin}" 
+                     data-trending="${r.trending}" 
+                     data-wine="${r.wine}" 
+                     data-vegan="${r.vegan}" 
+                     data-available="${r.available}" 
+                     data-rating="${r.rating}"
+                     onclick="openRestaurantPopup(${r.id})">
+                    <div class="restaurant-image">
+                        <img src="${r.image}" alt="${r.name}">
+                        <button class="favorite-btn" onclick="toggleFavorite(event, this)">♡</button>
+                        ${r.michelin ? '<div class="badge-michelin">⭐ ' + (r.rating === 5.0 ? '2 Stars' : 'Michelin Guide') + '</div>' : ''}
+                        ${r.available ? '<div class="badge-open">Open Now</div>' : ''}
+                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-location">📍 ${r.location}</div>
+                        <h3 class="restaurant-name">${r.name}</h3>
+                        <p class="restaurant-cuisine">${r.cuisine}</p>
+                        <div class="restaurant-tags">
+                            ${r.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="restaurant-footer">
+                            <div>
+                                <div class="rating">
+                                    <span class="rating-stars">${'★'.repeat(Math.floor(r.rating))}${r.rating % 1 !== 0 ? '☆' : ''}</span>
+                                    <span class="rating-value">${r.rating}</span>
+                                </div>
+                                <div class="rating-count">${r.reviews} reviews</div>
+                            </div>
+                            <span class="price">${r.price}</span>
+                        </div>
+                        <button class="reserve-btn" style="width: 100%; margin-top: 15px;" onclick="event.stopPropagation(); openRestaurantPopup(${r.id})">
+                            ${r.available ? 'Reserve Table' : 'Join Waitlist'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Functionality
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const cards = document.querySelectorAll('.restaurant-card');
+                let visibleCount = 0;
+                
+                cards.forEach(card => {
+                    let shouldShow = false;
+                    
+                    if (filter === 'all') {
+                        shouldShow = true;
+                    } else if (filter === 'michelin') {
+                        shouldShow = card.dataset.michelin === 'true';
+                    } else if (filter === 'trending') {
+                        shouldShow = card.dataset.trending === 'true';
+                    } else if (filter === 'wine') {
+                        shouldShow = card.dataset.wine === 'true';
+                    } else if (filter === 'vegan') {
+                        shouldShow = card.dataset.vegan === 'true';
+                    } else if (filter === 'available') {
+                        shouldShow = card.dataset.available === 'true';
+                    }
+                    
+                    if (shouldShow) {
+                        card.classList.remove('hidden');
+                        card.classList.add('fade-in');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                        card.classList.remove('fade-in');
+                    }
+                });
+                
+                document.getElementById('resultsCount').textContent = 
+                    visibleCount === 0 ? 'No restaurants found' : 
+                    `Showing 1-${visibleCount} of ${restaurants.length} restaurants in Amalfi Coast`;
+                
+                const noResults = document.getElementById('noResults');
+                if (visibleCount === 0) {
+                    noResults.classList.add('show');
+                } else {
+                    noResults.classList.remove('show');
+                }
+            });
+        });
+
+        // Favorite Toggle
+        function toggleFavorite(e, btn) {
+            e.stopPropagation();
+            btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+            btn.style.color = btn.textContent === '♥' ? '#ff4757' : '#94a3b8';
+        }
+
+        // Popup Functions
+        function openRestaurantPopup(id) {
+            currentRestaurant = restaurants.find(r => r.id === id);
+            popupGuestCount = 2;
+            
+            document.getElementById('popupImage').src = currentRestaurant.image;
+            document.getElementById('popupTag').textContent = currentRestaurant.michelin ? 'Michelin Star' : currentRestaurant.cuisine;
+            document.getElementById('popupName').textContent = currentRestaurant.name;
+            document.getElementById('popupLocation').textContent = '📍 ' + currentRestaurant.location;
+            document.getElementById('popupPrice').textContent = currentRestaurant.price;
+            document.getElementById('popupRating').textContent = currentRestaurant.rating;
+            document.getElementById('popupReviews').textContent = currentRestaurant.reviews + ' reviews';
+            document.getElementById('popupStars').textContent = '★'.repeat(Math.floor(currentRestaurant.rating));
+            document.getElementById('popupDescription').textContent = currentRestaurant.description;
+            
+            // Update features
+            document.getElementById('popupCuisine').textContent = currentRestaurant.features[0];
+            document.getElementById('popupHours').textContent = currentRestaurant.features[1];
+            document.getElementById('popupChef').textContent = currentRestaurant.features[2];
+            document.getElementById('popupDietary').textContent = currentRestaurant.features[3];
+            
+            // Update highlights
+            const highlightsList = document.getElementById('popupHighlights');
+            highlightsList.innerHTML = currentRestaurant.highlights.map(h => `<li>${h}</li>`).join('');
+            
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('popupDate').value = today;
+            document.getElementById('popupDate').min = today;
+            document.getElementById('popupGuestCount').textContent = popupGuestCount;
+            document.getElementById('popupTotal').textContent = '$0';
+            
+            document.getElementById('restaurantPopup').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRestaurantPopup() {
+            document.getElementById('restaurantPopup').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function changePopupGuests(delta) {
+            popupGuestCount = Math.max(1, Math.min(20, popupGuestCount + delta));
+            document.getElementById('popupGuestCount').textContent = popupGuestCount;
+        }
+
+        function submitRestaurantBooking() {
+            const date = document.getElementById('popupDate').value;
+            const time = document.getElementById('popupTime').value;
+            const name = document.getElementById('popupGuestName').value;
+            const email = document.getElementById('popupGuestEmail').value;
+            
+            if (!date || !name || !email) {
+                alert('Please fill in all required fields (Date, Name, and Email)');
+                return;
+            }
+            
+            // Save booking data
+            bookingData = {
+                restaurant: currentRestaurant.name,
+                date: date,
+                time: time,
+                guests: popupGuestCount,
+                name: name,
+                email: email,
+                ref: 'TRP-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+            
+            // Close restaurant popup and show QR
+            closeRestaurantPopup();
+            setTimeout(() => {
+                showQrModal();
+            }, 300);
+        }
+
+        // QR Code Functions
+        function showQrModal() {
+            document.getElementById('qrRestaurantName').textContent = bookingData.restaurant;
+            document.getElementById('qrDate').textContent = new Date(bookingData.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('qrTime').textContent = bookingData.time;
+            document.getElementById('qrGuests').textContent = bookingData.guests + ' people';
+            document.getElementById('qrRef').textContent = '#' + bookingData.ref;
+            
+            // Generate unique QR pattern based on booking ref
+            const qrCode = document.getElementById('qrCode');
+            qrCode.style.background = generateQRPattern(bookingData.ref);
+            
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        function generateQRPattern(ref) {
+            // Create a unique pattern based on the booking reference
+            const colors = ['#0f172a', '#1e293b', '#334155', '#475569'];
+            let pattern = '';
+            for (let i = 0; i < 100; i++) {
+                const color = colors[ref.charCodeAt(i % ref.length) % colors.length];
+                const x = (i % 10) * 20;
+                const y = Math.floor(i / 10) * 20;
+                pattern += `linear-gradient(135deg, ${color} 25%, transparent 25%) ${x}px ${y}px,`;
+            }
+            return pattern.slice(0, -1) + '; background-size: 20px 20px;';
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('popupGuestName').value = '';
+            document.getElementById('popupGuestEmail').value = '';
+            document.getElementById('popupRequests').value = '';
+        }
+
+        function downloadQR() {
+            alert('QR Code downloaded! Check your downloads folder.');
+        }
+
+        // Close on outside click
+        document.getElementById('restaurantPopup').addEventListener('click', function(e) {
+            if (e.target === this) closeRestaurantPopup();
+        });
+
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) closeQrModal();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeRestaurantPopup();
+                closeQrModal();
+            }
+        });
+
+        // Initialize
+        renderRestaurants(restaurants);
+    </script>
+
+</body>
+</html>
