@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activities - Trip Pilot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #0f172a;
+            background: #f6f8fb;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0 30px;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .menu a:hover {
+            color: white;
+        }
+
+        .menu a:hover::after {
+            width: 100%;
+        }
+
+        .menu a.active {
+            color: white;
+            font-weight: 600;
+        }
+
+        .menu a.active::after {
+            width: 100%;
+        }
+
+        .login-btn {
+            padding: 10px 24px;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .login-btn:hover {
+            background: white;
+            color: #0f172a;
+        }
+
+        /* HERO SECTION */
+        .hero-wrapper {
+            position: relative;
+            min-height: 500px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 30px;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1920&h=1080&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            padding: 120px 80px 80px;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero-text span {
+            color: #60a5fa;
+        }
+
+        .hero-text p {
+            color: rgba(255,255,255,0.95);
+            font-size: 16px;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+            max-width: 600px;
+        }
+
+        /* SEARCH BAR */
+        .search-widget {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 700px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-field {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            padding: 8px 10px;
+            flex: 1;
+            min-width: 0;
+            color: #334155;
+        }
+
+        .search-field::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-btn {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        /* CONTENT SECTIONS */
+        .content-section {
+            position: relative;
+            z-index: 10;
+            padding: 60px 5%;
+            background: #f6f8fb;
+        }
+
+        .section-header {
+            text-align: left;
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: #0f172a;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* CATEGORY FILTERS */
+        .category-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* ACTIVITIES GRID */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .activity-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 320px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .activity-card.hidden {
+            display: none;
+        }
+
+        .activity-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .activity-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .activity-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+        }
+
+        .activity-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            color: white;
+        }
+
+        .activity-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #3b82f6;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .activity-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .activity-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .activity-price {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .activity-price span {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .book-btn {
+            background: white;
+            color: #0f172a;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 10;
+            background: white;
+            padding: 40px 5%;
+            color: #0f172a;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* ACTIVITY POPUP MODAL */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .popup-modal.active {
+            display: flex;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: popupSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes popupSlide {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        
+        .popup-close:hover {
+            background: #ff4757;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .popup-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .popup-body {
+            padding: 30px;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .popup-title-section h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        
+        .popup-location {
+            color: #64748b;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .popup-price-section {
+            text-align: right;
+        }
+        
+        .popup-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        
+        .popup-price span {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        
+        .popup-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .popup-rating-stars {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+        
+        .popup-rating-value {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 18px;
+        }
+        
+        .popup-reviews {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .popup-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #dbeafe;
+            color: #3b82f6;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .popup-description {
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        
+        .popup-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .popup-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .popup-feature-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .popup-feature-text h4 {
+            font-size: 14px;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        
+        .popup-feature-text p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        
+        .popup-includes {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .popup-includes h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        
+        .popup-includes ul {
+            list-style: none;
+            color: #64748b;
+            line-height: 2;
+        }
+        
+        .popup-includes li:before {
+            content: "✓ ";
+            color: #22c55e;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .popup-booking-section {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+        }
+        
+        .popup-booking-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+        
+        .popup-form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .popup-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .popup-form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .popup-form-group input,
+        .popup-form-group select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            background: white;
+        }
+        
+        .popup-form-group input:focus,
+        .popup-form-group select:focus {
+            border-color: #3b82f6;
+        }
+        
+        .guest-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .guest-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: #f1f5f9;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #64748b;
+        }
+        
+        .guest-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .guest-count {
+            font-size: 16px;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: center;
+            color: #0f172a;
+        }
+        
+        .popup-total-section {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .popup-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .popup-total-row.final {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .popup-reserve-btn {
+            width: 100%;
+            padding: 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .popup-reserve-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* PAYMENT MODAL */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .payment-modal.active {
+            display: flex;
+        }
+        
+        .payment-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: paymentSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        @keyframes paymentSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .payment-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .payment-close:hover {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .payment-title {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        
+        .payment-subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .payment-amount {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .payment-amount-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        
+        .payment-amount-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .payment-form-group {
+            margin-bottom: 20px;
+        }
+        
+        .payment-form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .payment-form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .payment-form-group input:focus {
+            border-color: #3b82f6;
+        }
+        
+        .payment-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .payment-method {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 24px;
+        }
+        
+        .payment-method:hover,
+        .payment-method.active {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            background: #0f172a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pay-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+
+        /* QR CODE MODAL */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .qr-modal.active {
+            display: flex;
+        }
+        
+        .qr-content {
+            background: white;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            animation: qrSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        @keyframes qrSlide {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .qr-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .qr-close:hover {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .qr-icon {
+            width: 80px;
+            height: 80px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+        
+        .qr-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+        
+        .qr-subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        
+        .qr-code-container {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px dashed #e2e8f0;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(225deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(45deg, #0f172a 25%, transparent 25%), 
+                        linear-gradient(315deg, #0f172a 25%, transparent 25%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
+            position: relative;
+            border-radius: 10px;
+        }
+        
+        .qr-code::after {
+            content: "🎫";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            background: white;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+        
+        .qr-details {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .qr-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .qr-detail-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .qr-download-btn {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .qr-download-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+        
+        .qr-done-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .qr-done-btn:hover {
+            border-color: #0f172a;
+            color: #0f172a;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .activities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-text h1 {
+                font-size: 42px;
+            }
+            .popup-form-row {
+                grid-template-columns: 1fr;
+            }
+            .payment-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+            }
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-text h1 {
+                font-size: 32px;
+            }
+            .hero-content {
+                padding: 100px 30px 60px;
+            }
+            .search-widget {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 15px;
+            }
+            .search-field {
+                width: 100%;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 12px;
+            }
+            .search-field:last-of-type {
+                border-bottom: none;
+            }
+            .search-btn {
+                width: 100%;
+                border-radius: 12px;
+                margin-top: 10px;
+                height: 40px;
+            }
+            nav {
+                width: 95%;
+                padding: 0 20px;
+            }
+            .hero-wrapper {
+                border-radius: 0;
+                min-height: 400px;
+            }
+            .popup-header {
+                flex-direction: column;
+            }
+            .popup-price-section {
+                text-align: left;
+            }
+            .popup-features {
+                grid-template-columns: 1fr;
+            }
+            .popup-image {
+                height: 250px;
+            }
+            .payment-content,
+            .qr-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION WITH NAVIGATION -->
+    <div class="hero-wrapper">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="navbar">
+                <a href="index.html" class="logo">Trip Pilot</a>
+                <div class="menu">
+                    <a href="flights.html">Flights</a>
+                    <a href="hotelsdef.html">Hotels</a>
+                    <a href="activities.html" class="active">Activities</a>
+                    <a href="restau.html">Restaurants</a>
+                    <a href="role.html" class="login-btn">Sign up</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Unforgettable <span>Experiences.</span></h1>
+                <p>Discover curated adventures, tours, and activities for unforgettable memories.</p>
+                
+                <!-- Search Bar -->
+                <div class="search-widget">
+                    <input type="text" class="search-field" placeholder="Search activities..." id="searchInput" oninput="applyFilters()">
+                    <select class="search-field" id="categorySelect" onchange="filterFromSelect()">
+                        <option value="all">All Categories</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Cultural">Cultural</option>
+                        <option value="Relaxation">Relaxation</option>
+                        <option value="Nature">Nature</option>
+                        <option value="Food">Food & Drink</option>
+                    </select>
+                    <button class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORY FILTERS -->
+    <div class="content-section" style="padding-bottom: 0;">
+        <div class="category-filters">
+            <button class="category-btn active" onclick="filterCategory('all')">All Activities</button>
+            <button class="category-btn" onclick="filterCategory('Adventure')">Adventure</button>
+            <button class="category-btn" onclick="filterCategory('Cultural')">Cultural</button>
+            <button class="category-btn" onclick="filterCategory('Relaxation')">Relaxation</button>
+            <button class="category-btn" onclick="filterCategory('Nature')">Nature</button>
+            <button class="category-btn" onclick="filterCategory('Food')">Food & Drink</button>
+        </div>
+    </div>
+
+    <!-- ACTIVITIES GRID -->
+    <section class="content-section" id="activities">
+        <div class="section-header">
+            <h2>Popular Experiences</h2>
+            <p>Handpicked activities loved by travelers worldwide</p>
+        </div>
+
+        <div class="activities-grid" id="activityGrid">
+            <!-- Activities injected by JS -->
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Trip Pilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ACTIVITY POPUP -->
+    <div id="activityPopup" class="popup-modal">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closeActivityPopup()">&times;</button>
+            <img id="popupImage" class="popup-image" src="" alt="">
+            <div class="popup-body">
+                <div class="popup-header">
+                    <div class="popup-title-section">
+                        <span id="popupTag" class="popup-tag">Adventure</span>
+                        <h2 id="popupName">Activity Name</h2>
+                        <div class="popup-location" id="popupLocation">📍 Location</div>
+                        <div class="popup-rating">
+                            <span class="popup-rating-stars" id="popupStars">★★★★★</span>
+                            <span class="popup-rating-value" id="popupRating">4.9</span>
+                            <span class="popup-reviews" id="popupReviews">2,847 reviews</span>
+                        </div>
+                    </div>
+                    <div class="popup-price-section">
+                        <div class="popup-price" id="popupPrice">$220<span>/person</span></div>
+                        <div style="color: #94a3b8; font-size: 14px;">per person</div>
+                    </div>
+                </div>
+                
+                <p class="popup-description" id="popupDescription">
+                    Prepare for an unforgettable journey. This top-rated experience offers professional guides, 
+                    premium equipment, and breathtaking views.
+                </p>
+                
+                <div class="popup-features">
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">⏱️</div>
+                        <div class="popup-feature-text">
+                            <h4>Duration</h4>
+                            <p id="popupDuration">4-5 hours</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">👥</div>
+                        <div class="popup-feature-text">
+                            <h4>Group Size</h4>
+                            <p id="popupGroupSize">Max 12 people</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">🗣️</div>
+                        <div class="popup-feature-text">
+                            <h4>Languages</h4>
+                            <p>English, Italian</p>
+                        </div>
+                    </div>
+                    <div class="popup-feature">
+                        <div class="popup-feature-icon">📱</div>
+                        <div class="popup-feature-text">
+                            <h4>Booking</h4>
+                            <p>Instant confirmation</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="popup-includes">
+                    <h3>What's Included</h3>
+                    <ul id="popupIncludes">
+                        <li>Professional guide</li>
+                        <li>All necessary equipment</li>
+                        <li>Safety briefing and insurance</li>
+                        <li>Photos of your experience</li>
+                        <li>Refreshments</li>
+                    </ul>
+                </div>
+                
+                <div class="popup-booking-section">
+                    <h3 class="popup-booking-title">Book Your Experience</h3>
+                    <div class="popup-form-row">
+                        <div class="popup-form-group">
+                            <label>Select Date</label>
+                            <input type="date" id="popupDate" required>
+                        </div>
+                        <div class="popup-form-group">
+                            <label>Guests</label>
+                            <div class="guest-selector">
+                                <button class="guest-btn" onclick="changePopupGuests(-1)">-</button>
+                                <span class="guest-count" id="popupGuestCount">1</span>
+                                <button class="guest-btn" onclick="changePopupGuests(1)">+</button>
+                            </div>
+                        </div>
+                        <div class="popup-form-group">
+                            <label>Your Name</label>
+                            <input type="text" id="popupGuestName" placeholder="Full name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="popup-form-group" style="margin-bottom: 20px;">
+                        <label>Email</label>
+                        <input type="email" id="popupGuestEmail" placeholder="your@email.com" required>
+                    </div>
+                    
+                    <div class="popup-form-group" style="margin-bottom: 20px;">
+                        <label>Special Requests (Optional)</label>
+                        <input type="text" id="popupRequests" placeholder="Dietary requirements, accessibility needs, etc.">
+                    </div>
+                    
+                    <div class="popup-total-section">
+                        <div class="popup-total-row">
+                            <span>Experience Price</span>
+                            <span id="popupSubtotal">$220</span>
+                        </div>
+                        <div class="popup-total-row">
+                            <span>Service Fee</span>
+                            <span>$15</span>
+                        </div>
+                        <div class="popup-total-row final">
+                            <span>Total</span>
+                            <span id="popupTotal">$235</span>
+                        </div>
+                    </div>
+                    
+                    <button class="popup-reserve-btn" onclick="proceedToPayment()">Proceed to Payment</button>
+                    <p style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 15px;">
+                        You won't be charged yet • Free cancellation up to 24 hours before
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT MODAL -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-content">
+            <button class="payment-close" onclick="closePaymentModal()">&times;</button>
+            <h2 class="payment-title">Complete Your Booking</h2>
+            <p class="payment-subtitle">Enter your payment details to secure your spot</p>
+            
+            <div class="payment-amount">
+                <div class="payment-amount-label">Total Amount</div>
+                <div class="payment-amount-value" id="paymentAmount">$235</div>
+            </div>
+            
+            <div class="payment-methods">
+                <div class="payment-method active" onclick="selectPayment(this)">💳</div>
+                <div class="payment-method" onclick="selectPayment(this)">📱</div>
+                <div class="payment-method" onclick="selectPayment(this)">💰</div>
+            </div>
+            
+            <div class="payment-form-group">
+                <label>Cardholder Name</label>
+                <input type="text" id="cardName" placeholder="Name on card">
+            </div>
+            
+            <div class="payment-form-group">
+                <label>Card Number</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            
+            <div class="payment-row">
+                <div class="payment-form-group">
+                    <label>Expiry Date</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                </div>
+                <div class="payment-form-group">
+                    <label>CVV</label>
+                    <input type="text" id="cardCvv" placeholder="123" maxlength="3">
+                </div>
+            </div>
+            
+            <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+        </div>
+    </div>
+
+    <!-- QR CODE MODAL FOR ACTIVITIES -->
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-content">
+            <button class="qr-close" onclick="closeQrModal()">&times;</button>
+            <div class="qr-icon">✓</div>
+            <h2 class="qr-title">Payment Successful!</h2>
+            <p class="qr-subtitle">Show this QR code to access your activity</p>
+            
+            <div class="qr-code-container">
+                <div class="qr-code" id="activityQrCode"></div>
+            </div>
+            
+            <div class="qr-details">
+                <div class="qr-detail-row">
+                    <span>Activity</span>
+                    <span id="qrActivityName">Activity Name</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Date</span>
+                    <span id="qrDate">Jan 1, 2026</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Guests</span>
+                    <span id="qrGuests">2 people</span>
+                </div>
+                <div class="qr-detail-row">
+                    <span>Booking Ref</span>
+                    <span id="qrRef">#TRP-123456</span>
+                </div>
+            </div>
+            
+            <button class="qr-download-btn" onclick="downloadQR()">📥 Download QR Code</button>
+            <button class="qr-done-btn" onclick="closeQrModal()">Done</button>
+        </div>
+    </div>
+
+    <script>
+        const activities = [
+            { 
+                id: 1, 
+                name: "Alpine Paragliding", 
+                location: "Interlaken, Switzerland", 
+                price: 220, 
+                cat: "Adventure", 
+                img: "https://images.unsplash.com/photo-1533371452382-d45a9da51ad9?w=800", 
+                rating: 4.9,
+                reviews: "2,847",
+                duration: "3-4 hours",
+                groupSize: "Max 6 people",
+                description: "Soar like a bird over the breathtaking Swiss Alps with our experienced pilots. This tandem paragliding experience offers unparalleled views of Interlaken's twin lakes, snow-capped peaks, and lush valleys. No experience required - just bring your sense of adventure!",
+                includes: ["Professional pilot", "All safety equipment", "GoPro photos & videos", "Transport to launch site", "Insurance coverage"]
+            },
+            { 
+                id: 2, 
+                name: "Autumn Pagoda Tour", 
+                location: "Kyoto, Japan", 
+                price: 85, 
+                cat: "Cultural", 
+                img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800", 
+                rating: 4.8,
+                reviews: "1,523",
+                duration: "5-6 hours",
+                groupSize: "Max 15 people",
+                description: "Walk through centuries of history in Kyoto's most stunning temples and shrines. Witness the spectacular autumn foliage as you explore hidden gardens, participate in a traditional tea ceremony, and learn about Zen Buddhism from local monks.",
+                includes: ["Expert local guide", "Temple entrance fees", "Tea ceremony experience", "Traditional sweets", "Transportation between sites"]
+            },
+            { 
+                id: 3, 
+                name: "Mediterranean Yacht", 
+                location: "Amalfi, Italy", 
+                price: 450, 
+                cat: "Relaxation", 
+                img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800", 
+                rating: 5.0,
+                reviews: "892",
+                duration: "8 hours",
+                groupSize: "Max 12 people",
+                description: "Live la dolce vita aboard a luxury yacht along the Amalfi Coast. Swim in hidden coves, sip Prosecco on deck, and enjoy a gourmet lunch prepared by your onboard chef. The ultimate day of Mediterranean indulgence.",
+                includes: ["Skipper & crew", "Gourmet lunch & drinks", "Snorkeling equipment", "Towels & sunscreen", "Hotel pickup"]
+            },
+            { 
+                id: 4, 
+                name: "Sahara Dunes Trek", 
+                location: "Merzouga, Morocco", 
+                price: 140, 
+                cat: "Adventure", 
+                img: "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=800", 
+                rating: 4.7,
+                reviews: "3,241",
+                duration: "Overnight",
+                groupSize: "Max 10 people",
+                description: "Journey into the heart of the Sahara on camelback. Watch the sunset paint the dunes golden, sleep under a blanket of stars in a traditional Berber camp, and wake to a spectacular sunrise over the desert.",
+                includes: ["Camel trek", "Berber camp accommodation", "Dinner & breakfast", "Live traditional music", "Desert guide"]
+            },
+            { 
+                id: 5, 
+                name: "Outer Reef Discovery", 
+                location: "Cairns, Australia", 
+                price: 195, 
+                cat: "Adventure", 
+                img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800", 
+                rating: 4.9,
+                reviews: "1,156",
+                duration: "Full day",
+                groupSize: "Max 30 people",
+                description: "Dive into the vibrant underwater world of the Great Barrier Reef. Snorkel or scuba dive among colorful coral gardens, tropical fish, sea turtles, and maybe even a friendly reef shark. An unforgettable marine adventure.",
+                includes: ["Return boat transfer", "Snorkeling gear", "Lunch & refreshments", "Marine biologist guide", "Stinger suit"]
+            },
+            { 
+                id: 6, 
+                name: "Infinity Wellness Spa", 
+                location: "Ubud, Bali", 
+                price: 130, 
+                cat: "Relaxation", 
+                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800", 
+                rating: 4.6,
+                reviews: "2,089",
+                duration: "4 hours",
+                groupSize: "Private",
+                description: "Rejuvenate your body and soul in Ubud's most luxurious jungle spa. Experience traditional Balinese healing rituals, flower baths overlooking the rainforest, and massages using organic local ingredients.",
+                includes: ["Balinese massage", "Body scrub & flower bath", "Yoga session", "Healthy lunch", "Spa products gift"]
+            },
+            { 
+                id: 7, 
+                name: "Nordic Sea Kayak", 
+                location: "Lofoten, Norway", 
+                price: 175, 
+                cat: "Adventure", 
+                img: "https://images.unsplash.com/photo-1517176102644-b467306f26cc?w=800", 
+                rating: 4.8,
+                reviews: "987",
+                duration: "6 hours",
+                groupSize: "Max 8 people",
+                description: "Paddle through crystal-clear Arctic waters surrounded by towering fjords and white sandy beaches. Keep an eye out for sea eagles, seals, and maybe even whales in this pristine wilderness.",
+                includes: ["Kayak & safety gear", "Experienced guide", "Lunch on beach", "Dry suits", "Hot drinks & snacks"]
+            },
+            { 
+                id: 8, 
+                name: "Savanna Elephant Safari", 
+                location: "Maasai Mara, Kenya", 
+                price: 580, 
+                cat: "Nature", 
+                img: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800", 
+                rating: 4.9,
+                reviews: "642",
+                duration: "Full day",
+                groupSize: "Max 6 people",
+                description: "Get up close with Africa's gentle giants in their natural habitat. This ethical elephant encounter lets you observe, photograph, and learn about these magnificent creatures while supporting conservation efforts.",
+                includes: ["Conservation guide", "4x4 safari vehicle", "Bush breakfast", "Park fees", "Conservation donation"]
+            },
+            { 
+                id: 9, 
+                name: "Old Town Food Trail", 
+                location: "Rome, Italy", 
+                price: 95, 
+                cat: "Food", 
+                img: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=800", 
+                rating: 4.7,
+                reviews: "4,532",
+                duration: "4 hours",
+                groupSize: "Max 12 people",
+                description: "Eat your way through Rome's most authentic neighborhoods. Sample supplì, carciofi alla giudia, artisan gelato, and more while learning about the city's 2,000-year culinary history from a local food expert.",
+                includes: ["Food expert guide", "10+ food tastings", "Wine & beer", "Historical commentary", "Recipe booklet"]
+            }
+        ];
+
+        let currentActivity = null;
+        let popupGuestCount = 1;
+        let currentCategory = 'all';
+        let bookingData = {};
+
+        function renderGrid(data) {
+            const grid = document.getElementById('activityGrid');
+            grid.innerHTML = data.map(item => `
+                <div class="activity-card" onclick="openActivityPopup(${item.id})">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="activity-overlay"></div>
+                    <div class="activity-content">
+                        <span class="activity-tag">${item.cat}</span>
+                        <h3 class="activity-title">${item.name}</h3>
+                        <div class="activity-location">📍 ${item.location}</div>
+                        <div class="activity-footer">
+                            <div class="activity-price">$${item.price}<span>/person</span></div>
+                            <button class="book-btn" onclick="event.stopPropagation(); openActivityPopup(${item.id})">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(category) || (category === 'all' && btn.textContent.includes('All'))) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.getElementById('categorySelect').value = category;
+            applyFilters();
+        }
+
+        function filterFromSelect() {
+            const category = document.getElementById('categorySelect').value;
+            filterCategory(category);
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = activities;
+
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(a => a.cat === currentCategory);
+            }
+
+            if (query) {
+                filtered = filtered.filter(a => 
+                    a.name.toLowerCase().includes(query) || 
+                    a.location.toLowerCase().includes(query)
+                );
+            }
+
+            renderGrid(filtered);
+        }
+
+        // Popup Functions
+        function openActivityPopup(id) {
+            currentActivity = activities.find(a => a.id === id);
+            popupGuestCount = 1;
+            
+            document.getElementById('popupImage').src = currentActivity.img;
+            document.getElementById('popupTag').textContent = currentActivity.cat;
+            document.getElementById('popupName').textContent = currentActivity.name;
+            document.getElementById('popupLocation').textContent = '📍 ' + currentActivity.location;
+            document.getElementById('popupPrice').innerHTML = '$' + currentActivity.price + '<span>/person</span>';
+            document.getElementById('popupRating').textContent = currentActivity.rating;
+            document.getElementById('popupReviews').textContent = currentActivity.reviews + ' reviews';
+            document.getElementById('popupStars').textContent = '★'.repeat(Math.floor(currentActivity.rating));
+            document.getElementById('popupDescription').textContent = currentActivity.description;
+            document.getElementById('popupDuration').textContent = currentActivity.duration;
+            document.getElementById('popupGroupSize').textContent = currentActivity.groupSize;
+            
+            // Update includes list
+            const includesList = document.getElementById('popupIncludes');
+            includesList.innerHTML = currentActivity.includes.map(item => `<li>${item}</li>`).join('');
+            
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('popupDate').value = today;
+            document.getElementById('popupDate').min = today;
+            document.getElementById('popupGuestCount').textContent = popupGuestCount;
+            
+            updatePricing();
+            
+            document.getElementById('activityPopup').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeActivityPopup() {
+            document.getElementById('activityPopup').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function changePopupGuests(delta) {
+            popupGuestCount = Math.max(1, Math.min(20, popupGuestCount + delta));
+            document.getElementById('popupGuestCount').textContent = popupGuestCount;
+            updatePricing();
+        }
+
+        function updatePricing() {
+            const subtotal = currentActivity.price * popupGuestCount;
+            const total = subtotal + 15;
+            document.getElementById('popupSubtotal').textContent = '$' + subtotal;
+            document.getElementById('popupTotal').textContent = '$' + total;
+        }
+
+        function proceedToPayment() {
+            const date = document.getElementById('popupDate').value;
+            const name = document.getElementById('popupGuestName').value;
+            const email = document.getElementById('popupGuestEmail').value;
+            
+            if (!date || !name || !email) {
+                alert('Please fill in all required fields (Date, Name, and Email)');
+                return;
+            }
+            
+            // Save booking data
+            bookingData = {
+                activity: currentActivity.name,
+                date: date,
+                guests: popupGuestCount,
+                name: name,
+                email: email,
+                total: currentActivity.price * popupGuestCount + 15,
+                ref: 'TRP-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+            
+            // Update payment modal
+            document.getElementById('paymentAmount').textContent = '$' + bookingData.total;
+            
+            // Close activity popup and show payment
+            closeActivityPopup();
+            setTimeout(() => {
+                document.getElementById('paymentModal').classList.add('active');
+            }, 300);
+        }
+
+        // Payment Functions
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function selectPayment(element) {
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function processPayment() {
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvv = document.getElementById('cardCvv').value;
+            
+            if (!cardName || !cardNumber || !cardExpiry || !cardCvv) {
+                alert('Please fill in all card details');
+                return;
+            }
+            
+            // Simulate processing
+            const btn = document.querySelector('.pay-btn');
+            btn.textContent = 'Processing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                closePaymentModal();
+                showQrModal();
+                btn.textContent = 'Pay Now';
+                btn.disabled = false;
+                
+                // Clear payment form
+                document.getElementById('cardName').value = '';
+                document.getElementById('cardNumber').value = '';
+                document.getElementById('cardExpiry').value = '';
+                document.getElementById('cardCvv').value = '';
+            }, 2000);
+        }
+
+        // QR Code Functions
+        function showQrModal() {
+            document.getElementById('qrActivityName').textContent = bookingData.activity;
+            document.getElementById('qrDate').textContent = new Date(bookingData.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('qrGuests').textContent = bookingData.guests + ' people';
+            document.getElementById('qrRef').textContent = '#' + bookingData.ref;
+            
+            // Generate unique QR pattern
+            const qrCode = document.getElementById('activityQrCode');
+            qrCode.style.background = generateQRPattern(bookingData.ref);
+            
+            document.getElementById('qrModal').classList.add('active');
+        }
+
+        function generateQRPattern(ref) {
+            const colors = ['#0f172a', '#1e293b', '#334155', '#475569'];
+            let pattern = '';
+            for (let i = 0; i < 100; i++) {
+                const color = colors[ref.charCodeAt(i % ref.length) % colors.length];
+                const x = (i % 10) * 20;
+                const y = Math.floor(i / 10) * 20;
+                pattern += `linear-gradient(135deg, ${color} 25%, transparent 25%) ${x}px ${y}px,`;
+            }
+            return pattern.slice(0, -1) + '; background-size: 20px 20px;';
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('popupGuestName').value = '';
+            document.getElementById('popupGuestEmail').value = '';
+            document.getElementById('popupRequests').value = '';
+        }
+
+        function downloadQR() {
+            alert('QR Code downloaded! Check your downloads folder.');
+        }
+
+        // Close on outside click
+        document.getElementById('activityPopup').addEventListener('click', function(e) {
+            if (e.target === this) closeActivityPopup();
+        });
+
+        document.getElementById('paymentModal').addEventListener('click', function(e) {
+            if (e.target === this) closePaymentModal();
+        });
+
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) closeQrModal();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeActivityPopup();
+                closePaymentModal();
+                closeQrModal();
+            }
+        });
+
+        // Initialize
+        renderGrid(activities);
+    </script>
+</body>
+</html>
